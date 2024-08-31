@@ -41,6 +41,7 @@ const Login = ({ setIsAdmin }) => {
         <div className="h-screen flex items-center justify-center flex-col m-2">
             <div className="bg-white p-8 rounded shadow-xl sm:w-96">
                 <h2 className="text-[20px] mb-4 font-semibold">Admin Login Page</h2>
+                <p>For testing purpose you can use this email: <b>admn@gmail.com</b> and password: <b>admin</b></p>
                 <form onSubmit={handleLogin}>
                     <div className="mb-4">
                         <label htmlFor="email" className="block text-gray-600">
