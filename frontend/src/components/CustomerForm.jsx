@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 
+axios.defaults.withCredentials = true;
+
 const CustomerForm = () => {
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
