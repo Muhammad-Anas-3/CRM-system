@@ -2,6 +2,7 @@ import express from "express";
 import {
     addCustomer,
     deleteCustomer,
+    getCustomer,
     getCustomers,
     updateCustomer,
 } from "../controllers/customerController.js";
@@ -10,6 +11,9 @@ const router = express.Router();
 
 // @route   GET /api/customers
 router.get("/", getCustomers);
+
+// @route   GET /api/customers
+router.get("/:id", getCustomer);
 
 // @route   POST /api/customers
 router.post("/", verifyAdmin, addCustomer);

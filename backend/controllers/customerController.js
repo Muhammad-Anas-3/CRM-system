@@ -10,6 +10,16 @@ export const getCustomers = async (req, res, next) => {
   }
 };
 
+// Get all customers
+export const getCustomer = async (req, res, next) => {
+  try {
+    const customer = await Customer.findById(req.params.id);
+    res.json(customer);
+  } catch (err) {
+    next(err);
+  }
+};
+
 // Add a new customer
 export const addCustomer = async (req, res, next) => {
   const { name, email, phone, address } = req.body;
@@ -18,7 +28,7 @@ export const addCustomer = async (req, res, next) => {
       name,
       email,
       phone,
-      address
+      address,
     });
 
     customer = await customer.save();

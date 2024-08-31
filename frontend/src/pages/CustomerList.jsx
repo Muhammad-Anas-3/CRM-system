@@ -1,28 +1,89 @@
-import { useEffect, useState } from 'react';
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const CustomerList = () => {
     const [customers, setCustomers] = useState([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        // Fetch customers from API
-        fetch('/api/customers')
-            .then(response => response.json())
-            .then(data => setCustomers(data))
-            .catch(error => console.error('Error fetching customers:', error));
+        const fetchCustomers = async () => {
+            try {
+                const response = await axios.get(
+                    "https://crm-systemckend.vercel.app/api/customers"
+                );
+                setCustomers(response.data);
+            } catch (error) {
+                console.error("Error fetching customers:", error);
+            }
+        };
+
+        fetchCustomers();
     }, []);
 
+    const handleDelete = async (id) => {
+        try {
+            await axios.delete(`https://crm-systemckend.vercel.app/api/customers/${id}`);
+            setCustomers(customers.filter((customer) => customer._id !== id));
+        } catch (error) {
+            console.error("Error deleting customer:", error);
+        }
+    };
+
+    const handleEdit = (id) => {
+        navigate(`/customers/edit/${id}`);
+    };
+
+    const handleNewCustomer = () => {
+        navigate("/customers/new");
+    };
+
     return (
-        <div className="container mx-auto p-4">
-            <h1 className="text-2xl font-bold mb-4">Customer List</h1>
-            <ul>
-                {customers.map(customer => (
-                    <li key={customer.id} className="mb-2">
-                        <a href={`/customers/${customer.id}`} className="text-blue-500">
-                            {customer.name}
-                        </a>
-                    </li>
-                ))}
-            </ul>
+        <div className="container mx-auto mt-8">
+            <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-semibold">Customer List</h2>
+                <button
+                    onClick={handleNewCustomer}
+                    className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+                >
+                    New Customer
+                </button>
+            </div>
+            <table className="min-w-full bg-white">
+                <thead>
+                    <tr>
+                        <th className="py-2 px-4 border-b">Name</th>
+                        <th className="py-2 px-4 border-b">Email</th>
+                        <th className="py-2 px-4 border-b">Address</th>
+                        <th className="py-2 px-4 border-b">Phone</th>
+                        <th className="py-2 px-4 border-b">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {customers.map((customer) => (
+                        <tr key={customer._id}>
+                            <td className="py-2 px-4 border-b">{customer.name}</td>
+                            <td className="py-2 px-4 border-b">{customer.email}</td>
+                            <td className="py-2 px-4 border-b">{customer.address}</td>
+                            <td className="py-2 px-4 border-b">{customer.phone}</td>
+                            <td className="py-2 px-4 border-b flex space-x-2">
+                                <button
+                                    onClick={() => handleEdit(customer._id)}
+                                    className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600"
+                                >
+                                    Edit
+                                </button>
+                                <button
+                                    onClick={() => handleDelete(customer._id)}
+                                    className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
+                                >
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
     );
 };
