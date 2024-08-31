@@ -9,19 +9,9 @@ const verifyToken = (req, res, next) => {
 
     jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
         if (err) return next(errorHandler(403, "Invalid token!"));
-        req.admin = user;
+        req.user = user;
         next();
     });
 };
 
-const verifyAdmin = (req, res, next) => {
-    verifyToken(req, res, () => {
-        if (req.admin) {
-            next();
-        } else {
-            return next(errorHandler(403, "You are not authorized!"));
-        }
-    });
-};
-
-export { verifyToken, verifyAdmin };
+export { verifyToken };

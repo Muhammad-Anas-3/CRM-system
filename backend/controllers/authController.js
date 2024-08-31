@@ -16,7 +16,7 @@ const register = async (req, res, next) => {
         await newAdmin.save();
 
         const token = jwt.sign(
-            { id: newAdmin._id },
+            { id: newAdmin._id, isAdmin: newAdmin.isAdmin },
             process.env.JWT_SECRET
         );
 
@@ -47,7 +47,7 @@ const login = async (req, res, next) => {
             return next(errorHandler(400, "Wrong password or username!"));
 
         const token = jwt.sign(
-            { id: admin._id },
+            { id: admin._id, isAdmin: admin.isAdmin },
             process.env.JWT_SECRET
         );
 
