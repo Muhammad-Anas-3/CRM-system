@@ -13,15 +13,15 @@ const router = express.Router();
 router.get("/", getCustomers);
 
 // @route   GET /api/customers
-router.get("/:id", getCustomer);
+router.get("/:id", verifyToken, getCustomer);
 
 // @route   POST /api/customers
-router.post("/", addCustomer);
+router.post("/", verifyToken, addCustomer);
 
 // @route   PUT /api/customers/:id
-router.put("/:id", updateCustomer);
+router.put("/:id", verifyToken, updateCustomer);
 
 // @route   DELETE /api/customers/:id
-router.delete("/:id", deleteCustomer);
+router.delete("/:id", verifyToken, deleteCustomer);
 
 export default router;
