@@ -16,12 +16,12 @@ router.get("/", getCustomers);
 router.get("/:id", getCustomer);
 
 // @route   POST /api/customers
-router.post("/", verifyToken, addCustomer);
+router.post("/", addCustomer);
 
 // @route   PUT /api/customers/:id
-router.put("/:id", verifyToken, updateCustomer);
+router.put("/:id", updateCustomer);
 
 // @route   DELETE /api/customers/:id
-router.delete("/:id", verifyToken, deleteCustomer);
+router.delete("/:id", deleteCustomer);
 
 export default router;
