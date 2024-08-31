@@ -2,6 +2,8 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 
+axios.defaults.withCredentials = true;
+
 // eslint-disable-next-line react/prop-types
 const Login = ({ setIsAdmin }) => {
     const [email, setEmail] = useState("");
@@ -17,12 +19,13 @@ const Login = ({ setIsAdmin }) => {
         try {
             const res = await axios.post(
                 "https://crm-systemckend.vercel.app/api/auth/login",
-                { email, password },
-                { withCredentials: true }
+                { email, password }
             );
-            console.log(res);
+            console.log(res)
             setLoading(false);
             setIsAdmin(true);
+
+            // Navigate to the customers page
             navigate("/customers");
         } catch (error) {
             setLoading(false);
@@ -32,6 +35,7 @@ const Login = ({ setIsAdmin }) => {
             }, 3000);
         }
     };
+
 
     return (
         <div className="h-screen flex items-center justify-center flex-col m-2">

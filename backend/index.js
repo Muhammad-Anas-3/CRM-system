@@ -12,8 +12,8 @@ dotenv.config();
 
 const app = express();
 app.use(cors({
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    credentials: true 
+    origin: 'http://localhost:5173', // Frontend URL
+    credentials: true, // Allow credentials (cookies, authorization headers, etc.)
 }));
 
 // Connect to MongoDB 
