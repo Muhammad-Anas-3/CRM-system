@@ -1,4 +1,4 @@
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
 
@@ -19,10 +19,9 @@ const Login = ({ setIsAdmin }) => {
         "https://crm-systemckend.vercel.app/api/auth/login",
         { email, password }
       );
-      console.log(res);
+      console.log(res.data);
       setLoading(false);
       setIsAdmin(true);
-      // Redirect to the customer list page
       navigate("/customers");
     } catch (error) {
       setLoading(false);

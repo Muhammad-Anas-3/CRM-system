@@ -6,7 +6,7 @@ import Login from "./pages/LoginPage";
 import CustomerForm from "./components/CustomerForm";
 
 function App() {
-  const [isAdmin, setIsAdmin] = useState(true);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   return (
     <Router>

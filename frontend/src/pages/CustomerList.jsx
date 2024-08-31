@@ -23,7 +23,8 @@ const CustomerList = () => {
 
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`https://crm-systemckend.vercel.app/api/customers/${id}`);
+            const res = await axios.delete(`https://crm-systemckend.vercel.app/api/customers/${id}`);
+            console.log(res)
             setCustomers(customers.filter((customer) => customer._id !== id));
         } catch (error) {
             console.error("Error deleting customer:", error);

@@ -36,6 +36,7 @@ const login = async (req, res, next) => {
         const admin = await Admin.findOne({
             email: req.body.email,
         });
+        console.log(admin)
         if (!admin) return next(errorHandler(404, "Admin not found!"));
 
         const isPasswordCorrect = await bcrypt.compare(
