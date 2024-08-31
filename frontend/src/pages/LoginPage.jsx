@@ -15,9 +15,10 @@ const Login = () => {
         setError(null);
         try {
             const res = await axios.post(
-                "https://booking-app-backend-khaki.vercel.app/api/v1/auth/login",
+                "https://crm-systemckend.vercel.app/api/auth/login",
                 { email, password }
             );
+            console.log(res)
             setLoading(false);
             // Assuming res.data contains the authentication info
             navigate("/");

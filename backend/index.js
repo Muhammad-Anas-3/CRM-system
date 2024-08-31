@@ -5,18 +5,20 @@ import dotenv from 'dotenv';
 import customerRoutes from './routes/customers.js';
 import authRoutes from './routes/auth.js';
 import cookieParser from 'cookie-parser';
+import cors from "cors";
 
 
 dotenv.config();
 
 const app = express();
+app.use(cors());
 
 // Connect to MongoDB 
 connectDb();
 
 // Middleware
 app.use(bodyParser.json());
-app.use(cookieParser()); 
+app.use(cookieParser());
 
 // Routes
 app.use('/api/auth', authRoutes);
