@@ -2,6 +2,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
+axios.defaults.withCredentials = true;
+
 const CustomerList = () => {
     const [customers, setCustomers] = useState([]);
     const navigate = useNavigate();
