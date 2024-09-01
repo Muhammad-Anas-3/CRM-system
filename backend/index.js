@@ -12,7 +12,7 @@ dotenv.config();
 
 const app = express();
 app.use(cors({
-    origin: 'http://localhost:5173', // Frontend URL
+    origin: 'https://crm-system-five.vercel.app', // Frontend URL
     credentials: true, // Allow credentials (cookies, authorization headers, etc.)
 }));
 
@@ -25,12 +25,8 @@ app.use(cookieParser());
 
 // Routes
 app.use('/api/auth', authRoutes);
-app.use('/api/customers', customerRoutes);
-
-// Basic Route
-app.get('/', (req, res) => {
-    res.send('Server is running');
-});
+// Use customer routes on the root path
+app.use('/', customerRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 5000;
