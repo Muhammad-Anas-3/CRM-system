@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
+axios.defaults.withCredentials = true;
+
 const CustomerList = () => {
     const [customers, setCustomers] = useState([]);
     const navigate = useNavigate();
