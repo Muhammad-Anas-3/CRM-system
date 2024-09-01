@@ -6,7 +6,7 @@ import {
     getCustomers,
     updateCustomer,
 } from "../controllers/customerController.js";
-import { verifyToken } from "../utils/verification.js";
+import { verifyToken } from "../middleware/authMiddleware.js";
 const router = express.Router();
 
 // @route   GET /api/customers

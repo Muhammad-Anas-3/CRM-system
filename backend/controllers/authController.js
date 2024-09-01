@@ -1,66 +1,79 @@
-import Admin from "../models/admin_model.js";
+import User from "../models/user_model.js";
 import bcrypt from "bcryptjs";
-import errorHandler from "../utils/errorHandler.js";
 import jwt from "jsonwebtoken";
 
-const register = async (req, res, next) => {
-    try {
-        const salt = bcrypt.genSaltSync(10);
-        const hash = bcrypt.hashSync(req.body.password, salt);
+const registerUser = async (req, res, next) => {
+  const { name, email, password } = req.body;
 
-        const newAdmin = new Admin({
-            ...req.body,
-            password: hash,
-        });
+  if (!name || !email || !password) {
+    return res.status(400).json({ msg: "Please add all fields" });
+  }
 
-        await newAdmin.save();
+  // Check if user exists
+  const userExists = await User.findOne({ email });
 
-        const token = jwt.sign(
-            { id: newAdmin._id, isAdmin: newAdmin.isAdmin },
-            process.env.JWT_SECRET
-        );
+  if (userExists) {
+    return res.status(400).json({ msg: "User already exists" });
+  }
 
-        const { password, ...otherDetails } = newAdmin._doc;
-        res
-            .cookie("access_token", token, { httpOnly: true })
-            .status(200)
-            .json({ details: { ...otherDetails } });
+  // Hash password
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
 
-    } catch (err) {
-        next(err);
-    }
+  // Create user
+  const user = await User.create({
+    name,
+    email,
+    password: hashedPassword,
+  });
+
+  if (user) {
+    generateToken(res, user._id);
+    res.status(201).json({
+      _id: user.id,
+      name: user.name,
+      email: user.email,
+    });
+  } else {
+    res.status(400).json({ msg: "Invalid user data" });
+  }
 };
 
-const login = async (req, res, next) => {
-    try {
-        const admin = await Admin.findOne({
-            email: req.body.email,
-        });
-        console.log(admin)
-        if (!admin) return next(errorHandler(404, "Admin not found!"));
+// @desc    Authenticate a user
+// @route   POST /api/users/login
+// @access  Public
+const loginUser = async (req, res) => {
+  const { email, password } = req.body;
 
-        const isPasswordCorrect = await bcrypt.compare(
-            req.body.password,
-            admin.password
-        );
-        if (!isPasswordCorrect)
-            return next(errorHandler(400, "Wrong password or username!"));
+  // Check for user email
+  const user = await User.findOne({ email });
 
-        const token = jwt.sign(
-            { id: admin._id, isAdmin: admin.isAdmin },
-            process.env.JWT_SECRET
-        );
+  if (user && (await bcrypt.compare(password, user.password))) {
+    generateToken(res, user._id);
 
-        const { password, ...otherDetails } = admin._doc;
-        res
-            .cookie("access_token", token, {
-                httpOnly: true,
-            })
-            .status(200)
-            .json({ details: { ...otherDetails } });
-    } catch (err) {
-        next(err);
-    }
+    res.json({
+      _id: user.id,
+      name: user.name,
+      email: user.email,
+    });
+  } else {
+    res.status(400).json({ msg: "Invalid credentials" });
+  }
 };
 
-export { register, login };
+const generateToken = (res, userId) => {
+  const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
+    expiresIn: "30d",
+  });
+
+  res.cookie("jwt", token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV !== "development", // Use secure cookies in production
+    sameSite: "strict", // Prevent CSRF attacks
+    maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+  });
+};
+
+export default generateToken;
+
+export { registerUser, loginUser };

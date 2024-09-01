@@ -1,11 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 
-axios.defaults.withCredentials = true;
 
-// eslint-disable-next-line react/prop-types
-const Login = ({ setIsAdmin }) => {
+const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
@@ -17,31 +16,37 @@ const Login = ({ setIsAdmin }) => {
         setLoading(true);
         setError(null);
         try {
-            const res = await axios.post(
-                "https://crm-systemckend.vercel.app/api/auth/login",
-                { email, password }
-            );
-            console.log(res)
+            const res = await axios.post("http://localhost:5000/api/auth/login", {
+                email,
+                password,
+            });
+            toast.success("Login Successful", {
+                position: "top-right"
+            });
+            console.log(res.data);
             setLoading(false);
-            setIsAdmin(true);
-
+            localStorage.setItem("user", JSON.stringify(res.data));
             // Navigate to the customers page
-            navigate("/customers");
+            navigate("/");
+            window.location.reload();
         } catch (error) {
             setLoading(false);
-            setError(error.response?.data?.message || "An error occurred");
+            toast.error(error.response?.data?.msg || "An error occurred");
             setTimeout(() => {
                 setError(null);
             }, 3000);
         }
     };
 
-
     return (
         <div className="h-screen flex items-center justify-center flex-col m-2">
+
             <div className="bg-white p-8 rounded shadow-xl sm:w-96">
                 <h2 className="text-[20px] mb-4 font-semibold">Admin Login Page</h2>
-                <p>For testing purpose you can use this email: <b>admn@gmail.com</b> and password: <b>admin</b></p>
+                <p>
+                    For testing purpose you can use this email: <b>admn@gmail.com</b> and
+                    password: <b>admin</b>
+                </p>
                 <form onSubmit={handleLogin}>
                     <div className="mb-4">
                         <label htmlFor="email" className="block text-gray-600">

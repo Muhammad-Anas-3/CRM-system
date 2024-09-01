@@ -2,8 +2,6 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-axios.defaults.withCredentials = true;
-
 const CustomerList = () => {
     const [customers, setCustomers] = useState([]);
     const navigate = useNavigate();
@@ -12,7 +10,7 @@ const CustomerList = () => {
         const fetchCustomers = async () => {
             try {
                 const response = await axios.get(
-                    "https://crm-systemckend.vercel.app/api/customers"
+                    "http://localhost:5000/api/customers"
                 );
                 setCustomers(response.data);
             } catch (error) {
@@ -25,8 +23,8 @@ const CustomerList = () => {
 
     const handleDelete = async (id) => {
         try {
-            const res = await axios.delete(`https://crm-systemckend.vercel.app/api/customers/${id}`);
-            console.log(res)
+            const res = await axios.delete(`http://localhost:5000/api/customers/${id}`);
+            console.log(res);
             setCustomers(customers.filter((customer) => customer._id !== id));
         } catch (error) {
             console.error("Error deleting customer:", error);
@@ -52,41 +50,45 @@ const CustomerList = () => {
                     New Customer
                 </button>
             </div>
-            <table className="min-w-full bg-white">
-                <thead>
-                    <tr>
-                        <th className="py-2 px-4 border-b">Name</th>
-                        <th className="py-2 px-4 border-b">Email</th>
-                        <th className="py-2 px-4 border-b">Address</th>
-                        <th className="py-2 px-4 border-b">Phone</th>
-                        <th className="py-2 px-4 border-b">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {customers.map((customer) => (
-                        <tr key={customer._id}>
-                            <td className="py-2 px-4 border-b">{customer.name}</td>
-                            <td className="py-2 px-4 border-b">{customer.email}</td>
-                            <td className="py-2 px-4 border-b">{customer.address}</td>
-                            <td className="py-2 px-4 border-b">{customer.phone}</td>
-                            <td className="py-2 px-4 border-b flex space-x-2">
-                                <button
-                                    onClick={() => handleEdit(customer._id)}
-                                    className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600"
-                                >
-                                    Edit
-                                </button>
-                                <button
-                                    onClick={() => handleDelete(customer._id)}
-                                    className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
-                                >
-                                    Delete
-                                </button>
-                            </td>
+            {customers.length === 0 ? (
+                <p className="text-center text-gray-600">No customers in the database, please add one.</p>
+            ) : (
+                <table className="min-w-full bg-white">
+                    <thead>
+                        <tr>
+                            <th className="py-2 px-4 border-b">Name</th>
+                            <th className="py-2 px-4 border-b">Email</th>
+                            <th className="py-2 px-4 border-b">Address</th>
+                            <th className="py-2 px-4 border-b">Phone</th>
+                            <th className="py-2 px-4 border-b">Actions</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {customers.map((customer) => (
+                            <tr key={customer._id}>
+                                <td className="py-2 px-4 border-b">{customer.name}</td>
+                                <td className="py-2 px-4 border-b">{customer.email}</td>
+                                <td className="py-2 px-4 border-b">{customer.address}</td>
+                                <td className="py-2 px-4 border-b">{customer.phone}</td>
+                                <td className="py-2 px-4 border-b flex space-x-2">
+                                    <button
+                                        onClick={() => handleEdit(customer._id)}
+                                        className="bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600"
+                                    >
+                                        Edit
+                                    </button>
+                                    <button
+                                        onClick={() => handleDelete(customer._id)}
+                                        className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
+                                    >
+                                        Delete
+                                    </button>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            )}
         </div>
     );
 };

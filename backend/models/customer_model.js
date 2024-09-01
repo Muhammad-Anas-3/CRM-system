@@ -4,20 +4,20 @@ const CustomerSchema = new mongoose.Schema(
   {
     name: {
       type: String,
-      required: true,
+      required: [true, "Customer Name is required"],
     },
     email: {
       type: String,
-      required: true,
+      required: [true, "Customer Email is required"],
       unique: true,
     },
     address: {
       type: String,
-      required: true,
+      required: [true, "Customer address is required"],
     },
     phone: {
       type: String,
-      required: true,
+      required: [true, "Phone is required"],
     },
   },
   { timestamps: true }

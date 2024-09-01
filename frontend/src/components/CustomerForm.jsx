@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 axios.defaults.withCredentials = true;
 
@@ -9,22 +10,32 @@ const CustomerForm = () => {
     const [email, setEmail] = useState("");
     const [address, setAddress] = useState("");
     const [phone, setPhone] = useState("");
+    const [originalData, setOriginalData] = useState({});
     const { id } = useParams();
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (id) {
-            // Fetch customer details for editing
-            axios.get(`https://crm-systemckend.vercel.app/api/customers/${id}`)
-                .then(response => {
+        const fetchCustomer = async () => {
+            if (id) {
+                try {
+                    // Fetch customer details for editing
+                    const response = await axios.get(`http://localhost:5000/api/customers/${id}`);
                     const customer = response.data;
                     setName(customer.name);
                     setEmail(customer.email);
                     setAddress(customer.address);
                     setPhone(customer.phone);
-                })
-                .catch(error => console.error("Error fetching customer:", error));
-        }
+                    setOriginalData(customer); // Save original data to compare changes
+                } catch (error) {
+                    console.error("Error fetching customer:", error);
+                    toast.error("An error occurred while fetching the customer data", {
+                        position: "top-right"
+                    });
+                }
+            }
+        };
+
+        fetchCustomer();
     }, [id]);
 
     const handleSubmit = async (e) => {
@@ -32,17 +43,39 @@ const CustomerForm = () => {
 
         const customerData = { name, email, address, phone };
 
+        // Check if any fields have changed
+        if (
+            customerData.name === originalData.name &&
+            customerData.email === originalData.email &&
+            customerData.address === originalData.address &&
+            customerData.phone === originalData.phone
+        ) {
+            toast.info("No changes detected. Please edit the fields to update.", {
+                position: "top-right"
+            });
+            return;
+        }
+
         try {
             if (id) {
                 // Edit existing customer
-                await axios.put(`https://crm-systemckend.vercel.app/api/customers/${id}`, customerData);
+                await axios.put(`http://localhost:5000/api/customers/${id}`, customerData);
+                toast.success("Customer updated successfully", {
+                    position: "top-right"
+                });
             } else {
                 // Create new customer
-                await axios.post("https://crm-systemckend.vercel.app/api/customers", customerData);
+                await axios.post("http://localhost:5000/api/customers/", customerData);
+                toast.success("Customer created successfully", {
+                    position: "top-right"
+                });
             }
-            navigate("/customers");
+            navigate("/");
         } catch (error) {
             console.error("Error saving customer:", error);
+            toast.error("An error occurred while saving the customer", {
+                position: "top-right"
+            });
         }
     };
 
