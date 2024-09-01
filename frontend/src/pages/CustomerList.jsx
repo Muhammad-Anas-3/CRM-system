@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const CustomerList = () => {
     const [customers, setCustomers] = useState([]);
@@ -14,7 +15,7 @@ const CustomerList = () => {
                 );
                 setCustomers(response.data);
             } catch (error) {
-                console.error("Error fetching customers:", error);
+                toast.error(error.response?.data?.msg || "An error occurred");
             }
         };
 
@@ -27,7 +28,7 @@ const CustomerList = () => {
             console.log(res);
             setCustomers(customers.filter((customer) => customer._id !== id));
         } catch (error) {
-            console.error("Error deleting customer:", error);
+            toast.error(error.response?.data?.msg || "An error occurred");
         }
     };
 

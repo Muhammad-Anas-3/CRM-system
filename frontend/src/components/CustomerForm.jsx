@@ -64,8 +64,7 @@ const CustomerForm = () => {
             }
             navigate("/");
         } catch (error) {
-            console.error("Error saving customer:", error);
-            toast.error("An error occurred while saving the customer");
+            toast.error(error.response?.data?.msg || "An error occurred");
         }
     };
 
