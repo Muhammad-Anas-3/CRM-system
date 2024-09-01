@@ -66,7 +66,9 @@ const generateToken = (res, userId) => {
         expiresIn: "30d",
     });
 
-    res.cookie("jwt", token);
+    res.cookie("jwt", token, {
+        sameSite: 'none',
+    });
 };
 
 export default generateToken;
