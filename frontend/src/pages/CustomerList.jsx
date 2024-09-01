@@ -10,7 +10,7 @@ const CustomerList = () => {
         const fetchCustomers = async () => {
             try {
                 const response = await axios.get(
-                    "http://localhost:5000/api/customers"
+                    "https://crm-system-backend.vercel.app"
                 );
                 setCustomers(response.data);
             } catch (error) {
@@ -23,7 +23,7 @@ const CustomerList = () => {
 
     const handleDelete = async (id) => {
         try {
-            const res = await axios.delete(`http://localhost:5000/api/customers/${id}`);
+            const res = await axios.delete(`https://crm-system-backend.vercel.app/${id}`);
             console.log(res);
             setCustomers(customers.filter((customer) => customer._id !== id));
         } catch (error) {

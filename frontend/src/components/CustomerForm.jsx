@@ -19,7 +19,7 @@ const CustomerForm = () => {
             if (id) {
                 try {
                     // Fetch customer details for editing
-                    const response = await axios.get(`http://localhost:5000/api/customers/${id}`);
+                    const response = await axios.get(`https://crm-system-backend.vercel.app/${id}`);
                     const customer = response.data;
                     setName(customer.name);
                     setEmail(customer.email);
@@ -28,9 +28,7 @@ const CustomerForm = () => {
                     setOriginalData(customer); // Save original data to compare changes
                 } catch (error) {
                     console.error("Error fetching customer:", error);
-                    toast.error("An error occurred while fetching the customer data", {
-                        position: "top-right"
-                    });
+                    toast.error("An error occurred while fetching the customer data");
                 }
             }
         };
@@ -50,32 +48,24 @@ const CustomerForm = () => {
             customerData.address === originalData.address &&
             customerData.phone === originalData.phone
         ) {
-            toast.info("No changes detected. Please edit the fields to update.", {
-                position: "top-right"
-            });
+            toast.info("No changes detected. Please edit the fields to update.");
             return;
         }
 
         try {
             if (id) {
                 // Edit existing customer
-                await axios.put(`http://localhost:5000/api/customers/${id}`, customerData);
-                toast.success("Customer updated successfully", {
-                    position: "top-right"
-                });
+                await axios.put(`https://crm-system-backend.vercel.app/${id}`, customerData);
+                toast.success("Customer updated successfully");
             } else {
                 // Create new customer
-                await axios.post("http://localhost:5000/api/customers/", customerData);
-                toast.success("Customer created successfully", {
-                    position: "top-right"
-                });
+                await axios.post("https://crm-system-backend.vercel.app", customerData);
+                toast.success("Customer created successfully");
             }
             navigate("/");
         } catch (error) {
             console.error("Error saving customer:", error);
-            toast.error("An error occurred while saving the customer", {
-                position: "top-right"
-            });
+            toast.error("An error occurred while saving the customer");
         }
     };
 

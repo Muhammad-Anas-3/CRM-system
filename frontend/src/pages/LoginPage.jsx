@@ -16,13 +16,11 @@ const Login = () => {
         setLoading(true);
         setError(null);
         try {
-            const res = await axios.post("http://localhost:5000/api/auth/login", {
+            const res = await axios.post("https://crm-system-backend.vercel.app/auth/login", {
                 email,
                 password,
             });
-            toast.success("Login Successful", {
-                position: "top-right"
-            });
+            toast.success("Login Successful");
             console.log(res.data);
             setLoading(false);
             localStorage.setItem("user", JSON.stringify(res.data));
