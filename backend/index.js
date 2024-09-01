@@ -12,7 +12,7 @@ dotenv.config();
 
 const app = express();
 app.use(cors({
-    origin: 'http://localhost:5173', // Frontend URL
+    origin: 'https://crm-system-five.vercel.app', // Frontend URL
     credentials: true, // Allow credentials (cookies, authorization headers, etc.)
 }));
 
