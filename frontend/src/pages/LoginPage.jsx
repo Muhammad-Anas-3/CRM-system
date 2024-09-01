@@ -16,7 +16,7 @@ const Login = () => {
         setLoading(true);
         setError(null);
         try {
-            const res = await axios.post("https://crm-system-backend.vercel.app/auth/login", {
+            const res = await axios.post("https://crm-system-backend.vercel.app/api/auth/login", {
                 email,
                 password,
             });
