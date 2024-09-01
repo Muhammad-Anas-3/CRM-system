@@ -5,7 +5,7 @@ A simple CRM system built with MERN stack with authentication using JWT and cook
 
 ## Features
 - Backend API with Express & MongoDB
-- Routes for admin auth, customer create, delete and edit and get on customer based on id.
+- Routes for admin auth, create, delete and edit and get customer based admin auth.
 - JWT authentication stored in HTTP-only cookie
 - Protected routes and endpoints
 - Custom middleware to check JSON web token and store in cookie
